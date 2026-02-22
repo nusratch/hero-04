@@ -46,11 +46,19 @@ Job Application Tracker
 <p id="jobCount"></p>
 </div>
 
-<div class="tabs tabs-boxed justify-center mb-6">
-<a class="tab tab-active" onclick="setTab('all')">All</a>
-<a class="tab" onclick="setTab('interview')">Interview</a>
-<a class="tab" onclick="setTab('rejected')">Rejected</a>
+<div class="tabs tabs-boxed  max-w-4xl mx-auto px-4 flex  mb-3">
+<button id="tab-all" class="btn btn-primary btn-sm" onclick="setTab('all')">All</button>
+<button id="tab-interview" class="btn btn-outline btn-sm" onclick="setTab('interview')">Interview</button>
+<button id="tab-rejected" class="btn btn-outline btn-sm" onclick="setTab('rejected')">Rejected</button>
 </div>
+
+<div id="emptyState" class="hidden text-center py-20">
+  <img src="jobs.png" class="mx-auto w-20 mb-4">
+  <h3 class="text-xl font-bold">No jobs available</h3>
+  <p class="text-gray-500">Check back later or add new applications</p>
+</div>
+
+
 
 <div id="jobList" class="max-w-4xl mx-auto px-4 "></div>
 

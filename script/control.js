@@ -1,187 +1,73 @@
-var currentTab = "all";
+let currentTab = "all";
 
-var jobs = [
-  {
-    id: 1,
-    company: "Mobile First Corp",
-    position: "React Developer",
-    location: "Remote",
-    type: "Full Time",
-    salary: "$130k",
-    description: "Build mobile applications",
-    status: "all"
-  },
-  {
-    id: 2,
-    company: "WebFlow Agency",
-    position: "UI Designer",
-    location: "USA",
-    type: "Part Time",
-    salary: "$90k",
-    description: "Design beautiful interfaces",
-    status: "all"
-  },
-  {
-    id: 3,
-    company: "Google",
-    position: "Frontend Engineer",
-    location: "Remote",
-    type: "Full Time",
-    salary: "$120k",
-    description: "Work on modern web apps",
-    status: "all"
-  },
-  {
-    id: 4,
-    company: "Amazon",
-    position: "Backend Developer",
-    location: "Canada",
-    type: "Full Time",
-    salary: "$110k",
-    description: "Build scalable APIs",
-    status: "all"
-  },
-  {
-    id: 5,
-    company: "Meta",
-    position: "Product Designer",
-    location: "Remote",
-    type: "Contract",
-    salary: "$95k",
-    description: "Design user experiences",
-    status: "all"
-  },
-  {
-    id: 6,
-    company: "Netflix",
-    position: "Software Engineer",
-    location: "USA",
-    type: "Full Time",
-    salary: "$140k",
-    description: "Develop streaming features",
-    status: "all"
-  },
-  {
-    id: 7,
-    company: "Microsoft",
-    position: "Cloud Engineer",
-    location: "UK",
-    type: "Full Time",
-    salary: "$125k",
-    description: "Work with Azure cloud",
-    status: "all"
-  },
-  {
-    id: 8,
-    company: "Spotify",
-    position: "Mobile Developer",
-    location: "Remote",
-    type: "Part Time",
-    salary: "$85k",
-    description: "Build music apps",
-    status: "all"
-  }
+const jobs = [
+ {id:1,company:"Mobile First Corp",position:"React Developer",location:"Remote",type:"Full Time",salary:"$130k",desc:"Build mobile apps",status:"all"},
+ {id:2,company:"WebFlow Agency",position:"UI Designer",location:"USA",type:"Part Time",salary:"$90k",desc:"Design interfaces",status:"all"},
+ {id:3,company:"TechWave",position:"Frontend Dev",location:"Remote",type:"Full Time",salary:"$110k",desc:"Build UI",status:"all"},
+ {id:4,company:"PixelSoft",position:"Backend Dev",location:"UK",type:"Full Time",salary:"$120k",desc:"API work",status:"all"},
+ {id:5,company:"CodeLab",position:"JS Dev",location:"Remote",type:"Contract",salary:"$100k",desc:"JS projects",status:"all"},
+ {id:6,company:"DesignPro",position:"UX Designer",location:"Canada",type:"Part Time",salary:"$85k",desc:"UX work",status:"all"},
+ {id:7,company:"NextGen",position:"Fullstack",location:"Remote",type:"Full Time",salary:"$140k",desc:"Full stack apps",status:"all"},
+ {id:8,company:"SoftTech",position:"QA Engineer",location:"India",type:"Full Time",salary:"$70k",desc:"Testing apps",status:"all"}
 ];
-function setTab(tab) {
-  currentTab = tab;
 
-  var tabs = document.getElementsByClassName("tab");
-  for (var i = 0; i < tabs.length; i++) {
-    tabs[i].classList.remove("tab-active");
-  }
+function renderJobs(){
+ const list=document.getElementById("jobList");
+ const empty=document.getElementById("emptyState");
+ list.innerHTML="";
 
-  event.target.classList.add("tab-active");
-  render();
+ let filtered=currentTab==="all"?jobs:jobs.filter(j=>j.status===currentTab);
+
+ document.getElementById("jobCount").innerText=filtered.length+" jobs";
+
+ if(filtered.length===0){
+   empty.classList.remove("hidden");
+   return;
+ }else{
+   empty.classList.add("hidden");
+ }
+
+ filtered.forEach(j=>{
+ list.innerHTML+=`
+ <div class="card bg-base-100 shadow p-4 relative">
+ <button onclick="removeJob(${j.id})" class="absolute right-3 top-3 btn btn-xs btn-circle">🗑</button>
+ <h2 class="font-bold">${j.company}</h2>
+ <p>${j.position}</p>
+ <p>${j.location} • ${j.type} • ${j.salary}</p>
+ <p class="text-sm text-gray-500">${j.desc}</p>
+ <div class="mt-3 flex gap-2">
+ <button class="btn btn-sm btn-info" onclick="setStatus(${j.id},'interview')">Interview</button>
+ <button class="btn btn-sm btn-error" onclick="setStatus(${j.id},'rejected')">Rejected</button>
+ </div>
+ </div>`;
+ });
+
+ updateCounts();
 }
 
-function render() {
-  var jobList = document.getElementById("jobList");
-  var html = "";
-
-  var interviewCount = 0;
-  var rejectedCount = 0;
-  var shown = 0;
-
-  for (var i = 0; i < jobs.length; i++) {
-
-    if (jobs[i].status === "interview") interviewCount++;
-    if (jobs[i].status === "rejected") rejectedCount++;
-
-    if (currentTab === "all" || jobs[i].status === currentTab) {
-
-      shown++;
-
-      html += `
-      <div class="card bg-base-100 shadow p-5 relative">
-
-        <button onclick="deleteJob(${jobs[i].id})"
-        class="btn btn-sm btn-ghost absolute top-3 right-3">
-        🗑
-        </button>
-
-        <h3 class="font-bold text-lg">${jobs[i].company}</h3>
-        <p class="font-medium">${jobs[i].position}</p>
-
-        <p class="text-sm opacity-70">
-        ${jobs[i].location} • ${jobs[i].type} • ${jobs[i].salary}
-        </p>
-
-        <p class="text-sm mt-2 opacity-80">
-        ${jobs[i].description}
-        </p>
-
-        <div class="flex gap-3 mt-4">
-          <button class="btn btn-outline btn-success btn-sm"
-          onclick="setStatus(${jobs[i].id},'interview')">
-          Interview
-          </button>
-
-          <button class="btn btn-outline btn-error btn-sm"
-          onclick="setStatus(${jobs[i].id},'rejected')">
-          Rejected
-          </button>
-        </div>
-
-      </div>
-      `;
-    }
-  }
-
-  if (shown === 0) {
-    html = `
-    <div class="text-center mt-10">
-      <p class="text-lg font-semibold">No jobs available</p>
-      <p class="text-sm opacity-60">Please try another tab</p>
-    </div>
-    `;
-  }
-
-  jobList.innerHTML = html;
-
-  document.getElementById("totalCount").innerText = jobs.length;
-  document.getElementById("interviewCount").innerText = interviewCount;
-  document.getElementById("rejectedCount").innerText = rejectedCount;
-  document.getElementById("jobCount").innerText = jobs.length + " jobs";
+function setStatus(id,status){
+ const job=jobs.find(j=>j.id===id);
+ job.status=status;
+ renderJobs();
 }
 
-function setStatus(id, status) {
-  for (var i = 0; i < jobs.length; i++) {
-    if (jobs[i].id === id) {
-      jobs[i].status = status;
-    }
-  }
-  render();
+function removeJob(id){
+ const index=jobs.findIndex(j=>j.id===id);
+ jobs.splice(index,1);
+ renderJobs();
 }
 
-function deleteJob(id) {
-  var newJobs = [];
-  for (var i = 0; i < jobs.length; i++) {
-    if (jobs[i].id !== id) {
-      newJobs.push(jobs[i]);
-    }
-  }
-  jobs = newJobs;
-  render();
+function setTab(tab){
+ currentTab=tab;
+ document.querySelectorAll(".tab").forEach(t=>t.classList.remove("tab-active"));
+ event.target.classList.add("tab-active");
+ renderJobs();
 }
 
-render();
+function updateCounts(){
+ document.getElementById("totalCount").innerText=jobs.length;
+ document.getElementById("interviewCount").innerText=jobs.filter(j=>j.status==="interview").length;
+ document.getElementById("rejectedCount").innerText=jobs.filter(j=>j.status==="rejected").length;
+}
+
+renderJobs();
