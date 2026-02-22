@@ -1,51 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Job Application Tracker</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Application Tracker</title>
 
-
- <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
 </head>
 
-<body class="bg-cyan-700 min-h-screen ">
+<body class="bg-slate-100 min-h-screen">
 
+<div class="max-w-4xl mx-auto px-4 pt-10">
+<h1 class="text-3xl md:text-5xl font-bold mb-8">
+Job Application Tracker
+</h1>
+</div>
 
-  <div class="  py-6 px-10 mt-16">
-    <h1 class="text-4xl md:text-5xl font-bold text-white">
-      Job Application Tracker
-    </h1>
-  </div>
+<div class="max-w-4xl mx-auto px-4">
 
-  <div class="max-w-4xl mx-auto px-4">
-    
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
 
+<div class="card bg-base-100 shadow-xl text-center p-6">
+<h2 id="totalCount" class="text-3xl font-bold">0</h2>
+<p class="text-gray-600 mt-2">Total</p>
+</div>
 
-      <div class="card bg-base-100 shadow-xl text-center p-6">
-        <h2 id="totalCount" class="text-3xl font-bold text-blue-600">8</h2>
-        <p class="text-gray-600 mt-2">Total</p>
-      </div>
+<div class="card bg-base-100 shadow-xl text-center p-6">
+<h2 id="interviewCount" class="text-3xl font-bold text-green-600">0</h2>
+<p class="text-gray-600 mt-2">Interview</p>
+</div>
 
+<div class="card bg-base-100 shadow-xl text-center p-6">
+<h2 id="rejectedCount" class="text-3xl font-bold text-red-600">0</h2>
+<p class="text-gray-600 mt-2">Rejected</p>
+</div>
 
-      <div class="card bg-base-100 shadow-xl text-center p-6">
-        <h2 id="interviewCount" class="text-3xl font-bold text-green-600">0</h2>
-        <p class="text-gray-600 mt-2">Interview</p>
-      </div>
+</div>
 
+</div>
 
-      <div class="card bg-base-100 shadow-xl text-center p-6">
-        <h2 id="rejectedCount" class="text-3xl font-bold text-red-600">0</h2>
-        <p class="text-gray-600 mt-2">Rejected</p>
-      </div>
+<div class="max-w-4xl mx-auto px-4 flex justify-between mb-3">
+<h2 class="text-xl font-bold">Available Jobs</h2>
+<p id="jobCount"></p>
+</div>
 
-    </div>
+<div class="tabs tabs-boxed justify-center mb-6">
+<a class="tab tab-active" onclick="setTab('all')">All</a>
+<a class="tab" onclick="setTab('interview')">Interview</a>
+<a class="tab" onclick="setTab('rejected')">Rejected</a>
+</div>
 
-  </div>
+<div id="jobList" class="max-w-4xl mx-auto px-4 space-y-4"></div>
 
-  <script src="script/control.js"></script>
+<script src="script/control.js"></script>
 
 </body>
 </html>
