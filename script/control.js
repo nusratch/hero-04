@@ -1,73 +1,167 @@
 let currentTab = "all";
 
-const jobs = [
- {id:1,company:"Mobile First Corp",position:"React Developer",location:"Remote",type:"Full Time",salary:"$130k",desc:"Build mobile apps",status:"all"},
- {id:2,company:"WebFlow Agency",position:"UI Designer",location:"USA",type:"Part Time",salary:"$90k",desc:"Design interfaces",status:"all"},
- {id:3,company:"TechWave",position:"Frontend Dev",location:"Remote",type:"Full Time",salary:"$110k",desc:"Build UI",status:"all"},
- {id:4,company:"PixelSoft",position:"Backend Dev",location:"UK",type:"Full Time",salary:"$120k",desc:"API work",status:"all"},
- {id:5,company:"CodeLab",position:"JS Dev",location:"Remote",type:"Contract",salary:"$100k",desc:"JS projects",status:"all"},
- {id:6,company:"DesignPro",position:"UX Designer",location:"Canada",type:"Part Time",salary:"$85k",desc:"UX work",status:"all"},
- {id:7,company:"NextGen",position:"Fullstack",location:"Remote",type:"Full Time",salary:"$140k",desc:"Full stack apps",status:"all"},
- {id:8,company:"SoftTech",position:"QA Engineer",location:"India",type:"Full Time",salary:"$70k",desc:"Testing apps",status:"all"}
+let jobs = [
+  {
+    id: 1,
+    company: "Mobile First Corp",
+    position: "React Developer",
+    location: "Remote",
+    type: "Full Time",
+    salary: "$130K",
+    description: "Build mobile applications",
+    status: "all"
+  },
+  {
+    id: 2,
+    company: "WebFlow Agency",
+    position: "UI Designer",
+    location: "USA",
+    type: "Part Time",
+    salary: "$90K",
+    description: "Design beautiful interfaces",
+    status: "all"
+  },
+  {
+    id: 3,
+    company: "Google",
+    position: "Frontend Developer",
+    location: "Remote",
+    type: "Full Time",
+    salary: "$150K",
+    description: "Create web experiences",
+    status: "all"
+  },
+  {
+    id: 4,
+    company: "Amazon",
+    position: "Backend Developer",
+    location: "UK",
+    type: "Full Time",
+    salary: "$140K",
+    description: "Server side development",
+    status: "all"
+  },
+  {
+    id: 5,
+    company: "Meta",
+    position: "Software Engineer",
+    location: "Remote",
+    type: "Full Time",
+    salary: "$160K",
+    description: "Build scalable apps",
+    status: "all"
+  },
+  {
+    id: 6,
+    company: "Netflix",
+    position: "UX Designer",
+    location: "Canada",
+    type: "Part Time",
+    salary: "$95K",
+    description: "User experience design",
+    status: "all"
+  },
+  {
+    id: 7,
+    company: "Microsoft",
+    position: "Cloud Engineer",
+    location: "Remote",
+    type: "Full Time",
+    salary: "$155K",
+    description: "Cloud infrastructure",
+    status: "all"
+  },
+  {
+    id: 8,
+    company: "Apple",
+    position: "iOS Developer",
+    location: "USA",
+    type: "Full Time",
+    salary: "$145K",
+    description: "iOS applications",
+    status: "all"
+  }
 ];
 
-function renderJobs(){
- const list=document.getElementById("jobList");
- const empty=document.getElementById("emptyState");
- list.innerHTML="";
-
- let filtered=currentTab==="all"?jobs:jobs.filter(j=>j.status===currentTab);
-
- document.getElementById("jobCount").innerText=filtered.length+" jobs";
-
- if(filtered.length===0){
-   empty.classList.remove("hidden");
-   return;
- }else{
-   empty.classList.add("hidden");
- }
-
- filtered.forEach(j=>{
- list.innerHTML+=`
- <div class="card bg-base-100 shadow p-4 relative">
- <button onclick="removeJob(${j.id})" class="absolute right-3 top-3 btn btn-xs btn-circle">🗑</button>
- <h2 class="font-bold">${j.company}</h2>
- <p>${j.position}</p>
- <p>${j.location} • ${j.type} • ${j.salary}</p>
- <p class="text-sm text-gray-500">${j.desc}</p>
- <div class="mt-3 flex gap-2">
- <button class="btn btn-sm btn-info" onclick="setStatus(${j.id},'interview')">Interview</button>
- <button class="btn btn-sm btn-error" onclick="setStatus(${j.id},'rejected')">Rejected</button>
- </div>
- </div>`;
- });
-
- updateCounts();
+function updateDashboard() {
+  document.getElementById("totalCount").innerText = jobs.length;
+  document.getElementById("interviewCount").innerText = jobs.filter(j => j.status === "interview").length;
+  document.getElementById("rejectedCount").innerText = jobs.filter(j => j.status === "rejected").length;
 }
 
-function setStatus(id,status){
- const job=jobs.find(j=>j.id===id);
- job.status=status;
- renderJobs();
+function setTab(tab) {
+  currentTab = tab;
+
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("tab-active"));
+  event.target.classList.add("tab-active");
+
+  renderJobs();
 }
 
-function removeJob(id){
- const index=jobs.findIndex(j=>j.id===id);
- jobs.splice(index,1);
- renderJobs();
+function setStatus(id, status) {
+  const job = jobs.find(j => j.id === id);
+
+  if (job.status === status) {
+    job.status = "all";
+  } else {
+    job.status = status;
+  }
+
+  updateDashboard();
+  renderJobs();
 }
 
-function setTab(tab){
- currentTab=tab;
- document.querySelectorAll(".tab").forEach(t=>t.classList.remove("tab-active"));
- event.target.classList.add("tab-active");
- renderJobs();
+function deleteJob(id) {
+  jobs = jobs.filter(j => j.id !== id);
+  updateDashboard();
+  renderJobs();
 }
 
-function updateCounts(){
- document.getElementById("totalCount").innerText=jobs.length;
- document.getElementById("interviewCount").innerText=jobs.filter(j=>j.status==="interview").length;
- document.getElementById("rejectedCount").innerText=jobs.filter(j=>j.status==="rejected").length;
+function renderJobs() {
+  const list = document.getElementById("jobList");
+  list.innerHTML = "";
+
+  const filtered =
+    currentTab === "all"
+      ? jobs
+      : jobs.filter(j => j.status === currentTab);
+
+  document.getElementById("jobCount").innerText = filtered.length + " jobs";
+
+  if (filtered.length === 0) {
+    list.className = "max-w-4xl mx-auto bg-white rounded-xl shadow min-h-[350px] flex flex-col items-center justify-center text-center";
+
+    list.innerHTML = `
+      <img src="jobs.png" class="w-20 mb-4">
+      <h3 class="text-lg font-bold">No jobs available</h3>
+      <p class="text-gray-500 text-sm">Check back later or add new applications</p>
+    `;
+    return;
+  }
+
+  list.className = "grid grid-cols-1 gap-4";
+
+  filtered.forEach(job => {
+    list.innerHTML += `
+      <div class="card bg-base-100 shadow p-4 relative">
+
+        <button onclick="deleteJob(${job.id})" class="absolute top-3 right-3 btn btn-xs btn-circle">🗑</button>
+
+        <h3 class="font-bold">${job.company}</h3>
+        <p>${job.position}</p>
+        <p class="text-sm text-gray-500">${job.location} • ${job.type} • ${job.salary}</p>
+
+        <p class="text-sm mt-2">${job.description}</p>
+
+        <div class="mt-3 flex gap-2">
+          <button class="btn btn-xs btn-info" onclick="setStatus(${job.id},'interview')">Interview</button>
+          <button class="btn btn-xs btn-error" onclick="setStatus(${job.id},'rejected')">Rejected</button>
+        </div>
+
+      </div>
+    `;
+  });
 }
 
+updateDashboard();
 renderJobs();
