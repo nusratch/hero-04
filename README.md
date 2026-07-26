@@ -1,4 +1,4 @@
-Answers to Questions
+
 1. What is the difference between getElementById, getElementsByClassName, and querySelector / querySelectorAll?
 Ans: 
 a. getElementById =Finds one specific person by their unique ID.(one element)
